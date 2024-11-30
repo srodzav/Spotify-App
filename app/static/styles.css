@@ -1,0 +1,94 @@
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+body {
+    /* background: linear-gradient(45deg, #1db954, #191414); */
+    /* color: black;  */
+    font-family: Arial, sans-serif;
+    font-size: 1rem;
+}
+
+h1, h2 {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.table {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+    margin-top: 20px;
+}
+
+thead.thead-dark th {
+    background: #1db954;
+    border: none;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary {
+    background-color: #1db954;
+    border-color: #1db954;
+}
+
+.btn-primary:hover {
+    background-color: #1ed760;
+}
+
+.table tbody tr {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+button {
+    font-size: 1rem; /* Aumenta el tamaño base */
+}
+
+.card-body {
+    padding: 1rem;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@media (max-width: 576px) {
+    button {
+        font-size: 1.1rem;
+        padding: 0.5rem 1rem;
+    }
+    .card-body {
+        padding: 1.5rem;
+    }
+    th, td {
+        padding: 10px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .irrelevance{
+        display: none;
+    }
+}
+
+@media (min-width: 768px) {
+    body {
+        font-size: 1.1rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    body {
+        font-size: 1.2rem;
+    }
+}

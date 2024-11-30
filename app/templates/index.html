@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spotify Demo</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+        </symbol>
+        <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+        </symbol>
+        <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+        </symbol>
+    </svg>
+
+    <div id="alert-container" class="position-fixed top-0 start-50 translate-middle-x mt-3" style="z-index: 1055; max-width: 90%;"></div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container-fluid">
+
+            <a class="navbar-brand" href="#">&nbsp;&nbsp;<i class="bi bi-spotify"></i> Spotify Demo</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">&nbsp;&nbsp;Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#fav">&nbsp;&nbsp;Favorites</a>
+                    </li>
+                    <li class="nav-item"> 
+                        <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#aboutModal">&nbsp;&nbsp;Disclaimer</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <h1 class="my-4"><i class="bi bi-spotify"></i> Spotify Demo</h1>
+        <div class="input-group mb-3">
+            <input type="text" id="query" class="form-control" placeholder="Search for a song">
+            <button onclick="buscarCancion()" class="btn btn-primary" title="Search"><i class="bi bi-search"></i></button>
+            <button onclick="mostrarJSON()" class="btn btn-info" title="Show JSON"><i class="bi bi-filetype-json"></i> JSON</button>
+        </div>
+
+        <!-- Filters -->
+        <div class="row">
+            <div class="form-group col-lg-4 col-md-4 col-5">
+                <label for="artistFilter">Filter by Artis:</label>
+                <select id="artistFilter" class="form-control" onchange="filtrarCanciones()">
+                    <option value="">All Artists</option>
+                </select>
+            </div>
+            <div class="form-group col-lg-4 col-md-4 col-4">
+                <label for="songFilter">Filter by Song:</label>
+                <input type="text" id="songFilter" class="form-control" onkeyup="filtrarCanciones()">
+            </div>
+            <div class="form-group col-lg-1 col-md-1 col-1 align-self-end">
+                <button onclick="reiniciarTabla()" class="btn btn-warning" title="Refresh"><i class="bi bi-arrow-clockwise"></i></button>
+            </div>
+        </div>
+
+        <!-- Searched songs -->
+        <div class="d-flex justify-content-between align-items-center my-4">
+            <h2>Search Results</h2>
+            <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#resultsCollapse" aria-expanded="true" aria-controls="resultsCollapse" id="toggleResultsBtn">
+                <i class="bi bi-chevron-up"></i> Hide Results
+            </button>
+        </div>
+
+        <div class="collapse show" id="resultsCollapse">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="irrelevance">Artist</th>
+                        <th class="irrelevance">Song</th>
+                        <th class="irrelevance">Album</th>
+                        <th class="priority">Preview</th>
+                        <th class="priority"></th>
+                    </tr>
+                </thead>
+                <tbody id="results">
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Favorite songs table -->
+        <h2 class="my-4" id="fav">Favorite Songs</h2>    
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th class="irrelevance">Artist</th>
+                    <th class="irrelevance">Song</th>
+                    <th class="irrelevance">Album</th>
+                    <th class="priority">Preview</th>
+                    <th class="priority"></th>
+                </tr>
+            </thead>
+            <tbody id="favorites">
+            </tbody>
+        </table>
+    
+    </div>
+
+    <!-- JSON Modal -->
+    <div class="modal fade" id="jsonModal" tabindex="-1" aria-labelledby="jsonModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="jsonModalLabel">JSON Debug</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <pre id="jsonContent" class="bg-light text-dark p-3 rounded"></pre>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Disclaimer Modal -->
+    <div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="aboutModalLabel">About / Disclaimer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        This application is a personal project created to demonstrate the use of the Spotify API. 
+                        It is not endorsed, certified, or otherwise approved by Spotify. All song titles, album covers, 
+                        and artist names are copyright of Spotify and their respective owners.
+                    </p>
+                    <p>
+                        No data is stored permanently, and this app does not collect or share user data. 
+                        It is provided for educational purposes only.
+                    </p>
+                    <p class="text-muted text-center"><strong>Sebastian Rodriguez</strong></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <footer class="bg-dark text-white text-left py-3 mt-4">
+        <small class="mb-0">&nbsp;&nbsp;  &copy; Sebastian Rodriguez <span id="year"></span></small>
+    </footer>
+    
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

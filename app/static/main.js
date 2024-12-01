@@ -187,6 +187,56 @@ function toggleResults() {
     collapseInstance.toggle();
 }
 
+function showProfile(profile) {
+    document.getElementById("profileName").innerText = profile.display_name;
+    document.getElementById("profileEmail").innerText = profile.email;
+    document.getElementById("profileCountry").innerText = profile.country;
+    document.getElementById("profileImage").src = profile.images[0]?.url || '';
+    new bootstrap.Modal(document.getElementById("profileModal")).show();
+}
+
+function logout() {
+    sessionStorage.setItem('logoutMessage', 'Log out successfully!');
+    window.location.href = "/logout";
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    fetch("/get_profile")
+        .then(response => response.json())
+        .then(data => {
+            const authContainer = document.getElementById("auth-container");
+
+            if (data.logged_in) {
+                // Usuario autenticado: muestra el botón de perfil
+                const profile = data.profile;
+
+                authContainer.innerHTML = `
+                    <li class="nav-item">
+                        <button class="btn btn-success nav-link" data-bs-toggle="modal" data-bs-target="#profileModal">
+                            &nbsp;&nbsp;<i class="bi bi-person-circle"></i> Profile
+                        </button>
+                    </li>
+                `;
+
+                // Rellena los datos en el modal del perfil
+                document.getElementById("profileName").textContent = profile.display_name || "Unknown";
+                document.getElementById("profileEmail").textContent = profile.email || "Not provided";
+                document.getElementById("profileCountry").textContent = profile.country || "Unknown";
+                document.getElementById("profileImage").src = profile.images[0]?.url || "https://via.placeholder.com/150";
+            } else {
+                // Usuario no autenticado: muestra el botón de login
+                authContainer.innerHTML = `
+                    <li class="nav-item">
+                        <a class="btn btn-primary nav-link" href="/login">
+                            <i class="bi bi-spotify"></i> Log in with Spotify
+                        </a>
+                    </li>
+                `;
+            }
+        })
+        .catch(error => console.error("Error fetching profile:", error));
+});
+
 document.getElementById('resultsCollapse').addEventListener('hidden.bs.collapse', function () {
     const btn = document.getElementById('toggleResultsBtn');
     btn.innerHTML = '<i class="bi bi-chevron-down"></i> Show Results';
@@ -200,6 +250,11 @@ document.getElementById('resultsCollapse').addEventListener('shown.bs.collapse',
 
 document.addEventListener('DOMContentLoaded', function() {
     cargarFavoritos();
+    const message = sessionStorage.getItem('logoutMessage');
+    if (message) {
+        showAlert(message, 'success');
+        sessionStorage.removeItem('logoutMessage'); // Limpiar el mensaje
+    }
 });
 
 document.getElementById('query').value = '';

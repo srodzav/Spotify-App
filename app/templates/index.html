@@ -33,16 +33,20 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mr-auto">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">&nbsp;&nbsp;Home</a>
+                        <a class="nav-link active" href="#">&nbsp;&nbsp;<i class="bi bi-house-door-fill"></i> Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#fav">&nbsp;&nbsp;Favorites</a>
+                        <a class="nav-link" href="#fav">&nbsp;&nbsp;<i class="bi bi-bookmark-heart-fill"></i> Favorites</a>
                     </li>
                     <li class="nav-item"> 
-                        <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#aboutModal">&nbsp;&nbsp;Disclaimer</a>
+                        <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#aboutModal">&nbsp;&nbsp;<i class="bi bi-exclamation-triangle-fill"></i> Disclaimer</a>
                     </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <div id="auth-container">
+                    </div>
                 </ul>
             </div>
 
@@ -129,7 +133,7 @@
                     <pre id="jsonContent" class="bg-light text-dark p-3 rounded"></pre>
                 </div>
                 <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle-fill"></i> Close</button>
                 </div>
             </div>
         </div>
@@ -140,7 +144,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="aboutModalLabel">About / Disclaimer</h5>
+                    <h5 class="modal-title" id="aboutModalLabel">Disclaimer</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -156,13 +160,46 @@
                     <p class="text-muted text-center"><strong>Sebastian Rodriguez</strong></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle-fill"></i> Close</button>
                 </div>
             </div>
         </div>
     </div>
     
-
+    <!-- Profile Modal -->
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- Cabecera del Modal -->
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="profileModalLabel"><strong>Profile</strong></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+    
+                <!-- Contenido del Modal -->
+                <div class="modal-body">
+                    <div class="text-center">
+                        <!-- Imagen de Perfil -->
+                        <img id="profileImage" src="" alt="Profile Picture" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; border: 3px solid #1db954;">
+    
+                        <!-- Nombre de Usuario -->
+                        <h2 id="profileName" class="fw-bold"></h2>
+                        <p id="profileEmail" class="text-muted"></p>
+    
+                        <!-- País -->
+                        <p id="profileCountry" class="badge bg-success fs-6 px-3 py-2"></p>
+                    </div>
+                </div>
+    
+                <!-- Pie de Modal -->
+                <div class="modal-footer border-1">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle-fill"></i> Close</button>
+                    <button type="button" class="btn btn-danger" onclick="logout()"><i class="bi bi-box-arrow-in-right"></i> Log out</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <footer class="bg-dark text-white text-left py-3 mt-4">
         <small class="mb-0">&nbsp;&nbsp;  &copy; Sebastian Rodriguez <span id="year"></span></small>
     </footer>

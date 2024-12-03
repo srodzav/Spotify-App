@@ -84,7 +84,7 @@ This is a web application that integrates with the Spotify API, allowing users t
 
 **Sebastián Rodríguez**
 - [LinkedIn](https://www.linkedin.com/in/sebastian-rodriguez-zavala/)
-- [GitHub](https://github.com/srodzav)
+- [Web](https://sebastianrdz.com)
 - [Email](mailto:contact@sebastianrdz.com)
 
 ---
